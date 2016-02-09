@@ -1,0 +1,6 @@
+2/8/16:
+Discussed in class the scope of the project. Determined that it would be completely local. 
+Considered adding GUI or keeping it as a terminal application, as well as how placing ships
+would work on a console
+* chose coordinate of first square of a ship, then horizontal or vertical and it will be placed, provided
+  there is enough space, otherwise it would return an error message and promt to try again.
