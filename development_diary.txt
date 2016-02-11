@@ -4,3 +4,6 @@ Considered adding GUI or keeping it as a terminal application, as well as how pl
 would work on a console
 * chose coordinate of first square of a ship, then horizontal or vertical and it will be placed, provided
   there is enough space, otherwise it would return an error message and promt to try again.
+
+2/10/16:
+Checked out Löve, a 2d lua game engine, and added it to our considerations for writing our game.
