@@ -1,0 +1,12 @@
+Running instructions:
+
+Windows
+* Install Löve
+* drag the folder containing the main.lua file
+  onto the Löve application
+ 
+OSX
+* open -n -a love "~path/to/game"
+
+Linux
+* love /home/path/to/gamedir
