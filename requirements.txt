@@ -1,5 +1,7 @@
 Interface:
-
+allows clicking to place ships
+allows clicking to choose where to firing
 
 Functionality:
 *plays battleship
+2 player
