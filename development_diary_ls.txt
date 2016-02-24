@@ -1,0 +1,12 @@
+CS 372 Group 9 Diary: LStrunk
+
+2/5/16
+Was paired up with Kai for this group project of creating a Battleship game. We created a GitHub repository for our project and added ourselves as contributors. 
+
+2/8/16
+Our first group activity with Kai was today. Practicing writing user stories for our project, Battleship game. We had to rate these stories with their implementation difficulty. We did this by picking a medium difficulty user story and give it an arbitrary middle rating and then rate the other stories against that medium difficulty user story. 
+
+2/10/16
+We tried some pair programming to get some tests working for test driven developement. We decided to use the Love framework with luaunit testing. We could not get the testing suite to run in class so we have lots to learn. Pair programming is a awkward at first, but it became easier by the end of class. TDD is a cool concept, but I'm not sure it will be practical for graphical games.
+
+2/24/16

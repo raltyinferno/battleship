@@ -1,7 +1,15 @@
+-- requirements.txt
+-- CS 372 Software Construction Spring 2016
+-- KDS & LS
+-- February 10, 2016
+
+Requirements Document
+
 Interface:
-allows clicking to place ships
-allows clicking to choose where to firing
+- Graphical interface
+- Allows clicking to place ships
+- Allows clicking to choose where to fire
 
 Functionality:
-*plays battleship
-2 player
+- Plays battleship
+- 2 player local play
