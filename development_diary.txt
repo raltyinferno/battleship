@@ -1,3 +1,5 @@
+Kai Davids Schell
+
 2/8/16:
 Discussed in class the scope of the project. Determined that it would be completely local. 
 Considered adding GUI or keeping it as a terminal application, as well as how placing ships
