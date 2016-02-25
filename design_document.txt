@@ -1,4 +1,4 @@
--- design_documents.txt
+﻿-- design_documents.txt
 -- CS 372 Software Construction Spring 2016
 -- KDS & LS
 -- February 10, 2016
@@ -10,3 +10,7 @@ Frameworks:
 - Use luaunit.lua for the testing framework
 
 Classes:
+-Have a series of states, user input changes the state, each state has instructions for
+ handling the current state of the game.
+-Board contained in a seperate file and contains functions for setting up and drawing the game
+ board
