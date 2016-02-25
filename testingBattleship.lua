@@ -14,6 +14,9 @@
 -- setUp() and tearDown(), which will be executed respectively before and after every test.
 luaunit = require('luaunit')
 
+Board = require('board')
+
+
 emptyBoard ={}
 for i=1, 10 do
 	emptyBoard[i]={}
@@ -22,28 +25,28 @@ for i=1, 10 do
 	end
 end
 
-Board = {}
-function Board.new_board()
-	local blank_board = {}
-	for i=1, 10 do
-		blank_board[i] = {}
-		for j=1,10 do
-			blank_board[i][j] = 1
-		end
+test1Board ={}
+for i=2, 10 do
+	test1Board[1] = {1,1,1,1,1,0,0,0,0,0}
+	test1Board[i]={}
+	for j=1,10 do
+		test1Board[i][j] = 0
 	end
-	return blank_board
 end
 
 TestBattleship = {}
+	function TestBattleship:setUp()
+		self.testBoard = Board:new_board()
+	end
 
 	function TestBattleship:testEmptyBoard()
 		luaunit.assertEquals(self.testBoard,emptyBoard)
 	end
-	
-	function TestBattleship:setUp()
-		self.testBoard = Board:new_board()
+
+	function TestBattleship:testPlaceShipFunction()
+		Board.place_ship(self.testBoard,1,1,"carrier","vertical")
+		luaunit.assertEquals(self.testBoard,test1Board)
 	end
-	
 -- end of table TestBattleship
 
 
