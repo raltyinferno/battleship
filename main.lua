@@ -9,6 +9,7 @@ Board = require('board')
 --constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+CELLSIZE = 50
 
 --flags n' stuff
 local ship_err = false
@@ -18,6 +19,10 @@ local sub_message = ""
 local state = nil
 local p1_ships_placed = 0
 local p2_ships_placed = 0
+local selected_grid_x = 0
+local selected_grid_y = 0
+local active_board_x = nil
+local active_board_y = nil
 
 --states
 local START = 1
@@ -39,6 +44,8 @@ end
 ----------
 local function handle_P1_PLACING_UP()
 	sub_message = "PLAYER 1 PLACE YOUR SHIPS"
+	active_board_x = SCREEN_WIDTH/2-250
+	active_board_y = 10
 end
 
 local function handle_P1_PLACING_DRAW()
@@ -46,11 +53,13 @@ local function handle_P1_PLACING_DRAW()
 end
 
 local function handle_P2_PLACING_UP()
-	
+	sub_message = "PLAYER 2 PLACE YOUR SHIPS"
+	active_board_x = SCREEN_WIDTH/2-250
+	active_board_y = 10
 end
 
 local function handle_P2_PLACING_DRAW()
-	
+	love.graphics.draw(player2_board_grid, SCREEN_WIDTH/2-250,10)
 end
 -----------
 --TURN
@@ -101,11 +110,11 @@ function love.load(arg)
 	player1target = Board.new_board()
 	player2target = Board.new_board()
 	
-	player1_board_grid  = Board.drawBoard(50, player1board)
-	player1_target_grid  = Board.drawBoard(50, player2board)
+	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
+	player1_target_grid  = Board.drawBoard(CELLSIZE, player2board)
 	
-	player2_board_grid  = Board.drawBoard(50, player1target)
-	player2_target_grid  = Board.drawBoard(50, player2target)
+	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
+	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
 	
 	state = START
 
@@ -114,6 +123,12 @@ function love.load(arg)
 		-- ship_err = true
 	-- end
 	
+end
+
+function love.mousepressed(x,y,button,istouch)
+	if button == 1 then 
+		selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+	end
 end
 
 function love.update(dt)
@@ -133,6 +148,7 @@ function love.draw(dt)
 --Debuging stuff
     --love.graphics.draw(grid, 10,10)
 	love.graphics.print("Mouse x: " .. mouse_x .. " Mouse y " .. mouse_y, 50, 550)
+	love.graphics.print("Grid x: " .. selected_grid_x .. " Grid y " .. selected_grid_y, 450, 550)
 	if ship_err then
 		love.graphics.print("error placing ship, try again",600,550)
 	end

@@ -105,5 +105,22 @@ function Board.place_ship(board, x, y, ship_type, orientation)
 	return nil
 end
 
+function Board.find_grid_click(x,y,mouse_x,mouse_y,cellsize) --position of the board
+	for i=0,9 do
+		for j=0,9 do
+			if mouse_x >= i*cellsize+x and mouse_x <= (i+1)*cellsize+x then
+				if mouse_y >= j*cellsize+y and mouse_y <= (j+1)*cellsize+y then
+					return i+1,j+1
+				elseif mouse_y < y or mouse_y > 10*cellsize+y then
+					return 0,0
+				end
+			elseif mouse_x < x or mouse_x > 10*cellsize+x then
+				return 0,0
+			end
+			
+		end
+	end
+end
+
 
 return Board
