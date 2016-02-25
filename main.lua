@@ -6,34 +6,20 @@
 -- love .
 
 Board = require('board')
+local ship_err = false
+local mouse_x = nil
+local mouse_y = nil
 
-function drawBoard(cellsize, playerBoard)
-	canvas = love.graphics.newCanvas(cellsize * 10,cellsize * 10)
+--states
+local P1_PLACING = 1
+local P2_PLACING = 2
+local P1_TURN = 3
+local P2_TURN = 4
 
-	love.graphics.setCanvas(canvas)
-		-- Background color
-		love.graphics.setColor(0, 0, 255)
-    	love.graphics.rectangle('fill', 0, 0, cellsize * 10, cellsize * 10)
+local function handle_P1_PLACING()
 
-    	-- Set Grid Lines
-    	love.graphics.setColor(255, 255, 255)
-		for i = 0, 10 do
-			love.graphics.line(0, i * cellsize, cellsize * 10, i * cellsize)
-			love.graphics.line(i * cellsize, 0, i * cellsize, 10 * cellsize)
-		end
 
-		-- Set Ship Colors
-		for i = 1, 10 do
-			for j = 1, 10 do
-				love.graphics.print(playerBoard[i][j], i * cellsize - (cellsize/2),
-													   j * cellsize - (cellsize/2))
-			end
-		end
-	love.graphics.setCanvas()
-
-	return canvas
 end
-
 -- Configuration
 function love.conf(t)
 	t.title = "Battleship"
@@ -47,11 +33,17 @@ end
 
 function love.load(arg)
 	player1board = Board.new_board()
-	Board.place_ship(player1board,1,1,"carrier","vertical")
-	grid  = drawBoard(50, player1board)
+	if pcall(Board.place_ship(player1board,1,6,"carrier","vertical")) then
+	else
+		ship_err = true
+	end
+	grid  = Board.drawBoard(50, player1board)
 end
 
 -- Board.place_ship(board, x, y, ship_type, orientation)
+function love.update(dt)
+	mouse_x, mouse_y = love.mouse.getPosition()
+end
 
 function love.draw(dt)
     --love.graphics.print("Hello World",0,0)
@@ -59,6 +51,10 @@ function love.draw(dt)
     --love.graphics.print(player1board[1][1], 750,550)
 
     love.graphics.draw(grid, 10,10)
+	love.graphics.print("Mouse x: " .. mouse_x .. " Mouse y " .. mouse_y, 50, 550)
+	if ship_err then
+		love.graphics.print("error placing ship, try again",600,550)
+	end
 
 end
 
