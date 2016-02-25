@@ -65,47 +65,45 @@ function Board.place_ship(board, x, y, ship_type, orientation)
 
 	if x >= 1 and y >= 1 and x <= 10 and y <= 10 then
 		if orientation == "horizontal" then
-			if x + length - 1 <= 10 then
-				for i = x, length do
+			if (x + length - 1) <= 10 then
+				for i = x, length+x-1 do
 					if board[i][y] ~= 0 then
 						collision = true
+						return collision
 					end
 				end
 				if not collision then
-					for i = x, length do
+					for i = x, x+length-1 do
 						board[i][y] = shipNumber
 					end
 				end
 			else 
 				collision = true
-				error()
 			end
 		elseif orientation == "vertical" then
-			if y + length - 1 <= 10 then
-				for j = y, length do
+			if (y + length - 1) <= 10 then
+				for j = y, length+y-1 do
 					if board[x][j] ~= 0 then
 						collision = true
+						return collision
 					end
 				end
-				for j = y, length do
+				for j = y, y+length-1 do
 					board[x][j] = shipNumber
 				end
 			else 
 				collision = true
-				error()
 			end
 		else
 			collision = true
-			error()
 		end
 	else
 		collision = true
-		error()
 	end
-	return nil
+	return collision
 end
 
-function Board.find_grid_click(x,y,mouse_x,mouse_y,cellsize) --position of the board
+function Board.find_grid_click(x,y,mouse_x,mouse_y,cellsize) --param 1 and 2 are position of board
 	for i=0,9 do
 		for j=0,9 do
 			if mouse_x >= i*cellsize+x and mouse_x <= (i+1)*cellsize+x then

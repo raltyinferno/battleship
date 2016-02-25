@@ -40,39 +40,43 @@ local function handle_START()
 	state = P1_PLACING
 end
 ----------
---placing
+--Update
 ----------
 local function handle_P1_PLACING_UP()
-	sub_message = "PLAYER 1 PLACE YOUR SHIPS"
-	active_board_x = SCREEN_WIDTH/2-250
+	sub_message = "PLAYER 1 PLACE YOUR SHIPS" -- I wrote this stuff at 5 am, I may not remember
+	active_board_x = SCREEN_WIDTH/2-250		  -- how any of it works
 	active_board_y = 10
-end
-
-local function handle_P1_PLACING_DRAW()
-	love.graphics.draw(player1_board_grid, SCREEN_WIDTH/2-250,10)
+	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
 end
 
 local function handle_P2_PLACING_UP()
 	sub_message = "PLAYER 2 PLACE YOUR SHIPS"
 	active_board_x = SCREEN_WIDTH/2-250
 	active_board_y = 10
+	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
+end
+
+local function handle_P1_TURN_UP()
+	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
+	player1_target_grid  = Board.drawBoard(CELLSIZE, player2board)
+end
+
+local function handle_P2_TURN_UP()
+	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
+	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
+end
+--------
+--Draw
+--------
+local function handle_P1_PLACING_DRAW()
+	love.graphics.draw(player1_board_grid, SCREEN_WIDTH/2-250,10)
 end
 
 local function handle_P2_PLACING_DRAW()
 	love.graphics.draw(player2_board_grid, SCREEN_WIDTH/2-250,10)
 end
------------
---TURN
------------
-local function handle_P1_TURN_UP()
-	
-end
 
 local function handle_P1_TURN_DRAW()
-	
-end
-
-local function handle_P2_TURN_UP()
 	
 end
 
@@ -127,7 +131,11 @@ end
 
 function love.mousepressed(x,y,button,istouch)
 	if button == 1 then 
+		ship_err = false --debugging
 		selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+		if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
+			ship_err = true
+		end
 	end
 end
 
@@ -146,11 +154,10 @@ function love.draw(dt)
 	
 	
 --Debuging stuff
-    --love.graphics.draw(grid, 10,10)
 	love.graphics.print("Mouse x: " .. mouse_x .. " Mouse y " .. mouse_y, 50, 550)
 	love.graphics.print("Grid x: " .. selected_grid_x .. " Grid y " .. selected_grid_y, 450, 550)
 	if ship_err then
-		love.graphics.print("error placing ship, try again",600,550)
+		love.graphics.print("error placing ship, try again",600,570)
 	end
 
 end
