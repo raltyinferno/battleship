@@ -30,6 +30,8 @@ local P1_PLACING = 2
 local P2_PLACING = 3
 local P1_TURN = 4
 local P2_TURN = 5
+local P1_PICKING = 6
+local P2_PICKING = 7
 
 -----------------
 --state handlers
@@ -37,6 +39,23 @@ local P2_TURN = 5
 --split between functions for the love draw, and love update functions
 
 local function handle_START()
+	player1board = Board.new_board()
+	player2board = Board.new_board()
+	
+	player1board.x = SCREEN_WIDTH/2-(10*CELLSIZE/2)
+	player1board.y = 10
+	
+	player2board.x = SCREEN_WIDTH/2-(10*CELLSIZE/2)
+	player2board.y = 10
+	
+	player1target = Board.new_board()
+	player2target = Board.new_board()
+
+	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
+	player1_target_grid  = Board.drawBoard(CELLSIZE, player2board)
+	
+	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
+	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
 	state = P1_PLACING
 end
 ----------
@@ -44,16 +63,24 @@ end
 ----------
 local function handle_P1_PLACING_UP()
 	sub_message = "PLAYER 1 PLACE YOUR SHIPS" -- I wrote this stuff at 5 am, I may not remember
-	active_board_x = SCREEN_WIDTH/2-250		  -- how any of it works
-	active_board_y = 10
+	active_board_x = player1board.x	  -- how any of it works
+	active_board_y = player1board.y
 	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
 end
 
 local function handle_P2_PLACING_UP()
 	sub_message = "PLAYER 2 PLACE YOUR SHIPS"
-	active_board_x = SCREEN_WIDTH/2-250
-	active_board_y = 10
+	active_board_x = player2board.x
+	active_board_y = player2board.y
 	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
+end
+
+local function handle_P1_PICKING_UP()
+
+end
+
+local function handle_P2_PICKING_UP()
+
 end
 
 local function handle_P1_TURN_UP()
@@ -69,11 +96,19 @@ end
 --Draw
 --------
 local function handle_P1_PLACING_DRAW()
-	love.graphics.draw(player1_board_grid, SCREEN_WIDTH/2-250,10)
+	love.graphics.draw(player1_board_grid, SCREEN_WIDTH/2-(10*CELLSIZE/2),10)
 end
 
 local function handle_P2_PLACING_DRAW()
-	love.graphics.draw(player2_board_grid, SCREEN_WIDTH/2-250,10)
+	love.graphics.draw(player2_board_grid, SCREEN_WIDTH/2-(10*CELLSIZE/2),10)
+end
+
+local function handle_P1_PICKING_DRAW()
+
+end
+
+local function handle_P2_PICKING_DRAW()
+
 end
 
 local function handle_P1_TURN_DRAW()
@@ -97,45 +132,31 @@ end
 
  update_handlers = {[START] = handle_START,
 					[P1_PLACING] = handle_P1_PLACING_UP,
-					[P1_TURN] = handle_P1_TURN_UP,
+					[P1_PICKING] = handle_P1_PICKING_UP,
+					[P1_TURN]    = handle_P1_TURN_UP,
 					[P2_PLACING] = handle_P2_PLACING_UP,
-					[P2_TURN] = handle_P2_TURN_UP}
+					[P2_PICKING] = handle_P2_PICKING_UP,
+					[P2_TURN]    = handle_P2_TURN_UP}
  
  draw_handlers = {[START] = handle_START,
 					[P1_PLACING] = handle_P1_PLACING_DRAW,
-					[P1_TURN] = handle_P1_TURN_DRAW,
+					[P1_PICKING] = handle_P1_PICKING_DRAW,
+					[P1_TURN]    = handle_P1_TURN_DRAW,
 					[P2_PLACING] = handle_P2_PLACING_DRAW,
-					[P2_TURN] = handle_P2_TURN_DRAW}
+					[P2_PICKING] = handle_P2_PICKING_DRAW,
+					[P2_TURN]    = handle_P2_TURN_DRAW}
 
 function love.load(arg)
-	player1board = Board.new_board()
-	player2board = Board.new_board()
-	
-	player1target = Board.new_board()
-	player2target = Board.new_board()
-	
-	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
-	player1_target_grid  = Board.drawBoard(CELLSIZE, player2board)
-	
-	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
-	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
-	
 	state = START
-
-	-- if pcall(Board.place_ship(player1board,1,6,"carrier","vertical")) then
-	-- else
-		-- ship_err = true
-	-- end
-	
 end
 
 function love.mousepressed(x,y,button,istouch)
 	if button == 1 then 
 		ship_err = false --debugging
 		selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-		if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
-			ship_err = true
-		end
+		-- if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
+			-- ship_err = true
+		-- end
 	end
 end
 
@@ -162,11 +183,7 @@ function love.draw(dt)
 
 end
 
-function love.mousereleased(x, y, button, istouch)
-	if button == 1 then
-		
-	end
-end
+
 
 
 

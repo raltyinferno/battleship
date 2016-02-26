@@ -27,20 +27,20 @@ function Board.drawBoard(cellsize, playerBoard)
 			love.graphics.line(i * cellsize, 0, i * cellsize, 10 * cellsize)
 		end
 
-		-- Set Ship Colors
+		-- Set Ship Colors/values
 		for i = 1, 10 do
-			for j = 1, 10 do
+			for j = 1, 10 do    
 				love.graphics.print(playerBoard[i][j], i * cellsize - (cellsize/2)-5,
 													   j * cellsize - (cellsize/2)-5)
-			end
+			end								--the -5 is to center the number in the cell
 		end
 	love.graphics.setCanvas()
 
 	return canvas
 end
 
-
-function Board.place_ship(board, x, y, ship_type, orientation)
+--returns true if there was an error placing
+function Board.place_ship(board, x, y, ship_type, orientation) 
 	local length = nil
 	local shipNumber = nil
 	local collision = false
