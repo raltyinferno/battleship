@@ -96,11 +96,11 @@ end
 --Draw
 --------
 local function handle_P1_PLACING_DRAW()
-	love.graphics.draw(player1_board_grid, SCREEN_WIDTH/2-(10*CELLSIZE/2),10)
+	love.graphics.draw(player1_board_grid, player1board.x,player1board.y)
 end
 
 local function handle_P2_PLACING_DRAW()
-	love.graphics.draw(player2_board_grid, SCREEN_WIDTH/2-(10*CELLSIZE/2),10)
+	love.graphics.draw(player2_board_grid, player2board.x,player2board.y)
 end
 
 local function handle_P1_PICKING_DRAW()

@@ -9,7 +9,12 @@ Interface:
 - Graphical interface
 - Allows clicking to place ships
 - Allows clicking to choose where to fire
+- Shows position of shots so far
 
 Functionality:
 - Plays battleship
 - 2 player local play
+- Ships placeable either horizontal or vertical
+- can be restarted
+- ship placement can be reset while placing
+- 

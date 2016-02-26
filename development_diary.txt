@@ -21,3 +21,7 @@ Also wrote a test for placing a ship and got it to pass.
 Set up states for the game(not complete by any stretch), added a tracker for the mouse, did some display formating
 set up constants for easy maintenence and continued development, did... some other stuff, I should have been
 keeping track.
+
+2/25/16:
+Fixed a bug with my mouse grid detection, changed several places where functions were being passed the same
+literal in many places to passing them a single variable that can be changed in one place.
