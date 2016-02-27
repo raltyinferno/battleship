@@ -25,3 +25,6 @@ keeping track.
 2/25/16:
 Fixed a bug with my mouse grid detection, changed several places where functions were being passed the same
 literal in many places to passing them a single variable that can be changed in one place.
+
+2/27/16:
+Added a function that should work for detecting mouse clicks for any button given that button's position and dimensions
