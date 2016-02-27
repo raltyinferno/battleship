@@ -12,11 +12,12 @@
 
 -- When tests are defined in tables, you can optionally define two special functions,
 -- setUp() and tearDown(), which will be executed respectively before and after every test.
+
 luaunit = require('luaunit')
 
 Board = require('board')
 
-
+-- Objects for Testing
 emptyBoard ={}
 for i=1, 10 do
 	emptyBoard[i]={}
@@ -34,6 +35,7 @@ for i=2, 10 do
 	end
 end
 
+-- Testing Battleship Class
 TestBattleship = {}
 	function TestBattleship:setUp()
 		self.testBoard = Board:new_board()

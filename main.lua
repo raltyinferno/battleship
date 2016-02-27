@@ -3,7 +3,9 @@
 -- KDS & LS
 -- February 26, 2016
 
+-- open the folder "/battleship/" in Love application
 -- love .
+
 Board = require('board')
 
 --constants
@@ -58,6 +60,7 @@ local function handle_START()
 	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
 	state = P1_PLACING
 end
+
 ----------
 --Update
 ----------
@@ -92,6 +95,7 @@ local function handle_P2_TURN_UP()
 	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
 	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
 end
+
 --------
 --Draw
 --------

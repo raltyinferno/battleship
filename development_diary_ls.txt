@@ -10,3 +10,4 @@ Our first group activity with Kai was today. Practicing writing user stories for
 We tried some pair programming to get some tests working for test driven developement. We decided to use the Love framework with luaunit testing. We could not get the testing suite to run in class so we have lots to learn. Pair programming is a awkward at first, but it became easier by the end of class. TDD is a cool concept, but I'm not sure it will be practical for graphical games.
 
 2/24/16
+Lots of pair programming with Kai. Got the unit testing working, got love to compile, and got the basic board display working. It was nice to finally get lots of work done and finalize our basic design.
