@@ -120,5 +120,17 @@ function Board.find_grid_click(x,y,mouse_x,mouse_y,cellsize) --param 1 and 2 are
 	end
 end
 
+function Board.find_button_click(mouse_x,mouse_y,button_x, button_y,width,height)
+	if mouse_x >= button_x and mouse_x <= button_x+width then
+		if mouse_y >= button_y and mouse_y <= button_y+height then
+			return true
+		else
+			return false
+		end
+	else 
+		return false
+	end
+end
+
 
 return Board

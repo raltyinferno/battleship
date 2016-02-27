@@ -14,6 +14,8 @@ Interface:
 Functionality:
 - Plays battleship
 - 2 player local play
+- tracks hits on each player's ships
+- shows players where they have shot so far, and if it hit a ship there
 - Ships placeable either horizontal or vertical
 - can be restarted
 - ship placement can be reset while placing
