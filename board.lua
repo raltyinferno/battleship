@@ -1,3 +1,7 @@
+-- board.lua
+-- CS 372 Software Construction Spring 2016
+-- KDS & LS
+-- February 26, 2016
 
 local Board = {}
 
