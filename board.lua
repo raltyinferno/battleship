@@ -5,6 +5,14 @@
 
 local Board = {}
 
+local boardColor = 	{ {0,150,200}, --ocean
+					  {0,201,50}, --ship 1
+					  {201,151,0}, --ship 2
+					  {201,0,50}, --ship 3
+					  {0,201,50}, --ship 4
+					  {151,0,201} --ship 5
+					}
+
 function Board.new_board()
 	local blank_board = {}
 	for i=1, 10 do
@@ -24,20 +32,25 @@ function Board.drawBoard(cellsize, playerBoard)
 		love.graphics.setColor(0, 150, 200)
     	love.graphics.rectangle('fill', 0, 0, cellsize * 10, cellsize * 10)
 
-    	-- Set Grid Lines
+		-- Set Ship Colors/values
+		for i = 1, 10 do
+			for j = 1, 10 do
+				love.graphics.setColor(boardColor[(playerBoard[i][j]+1)])
+				love.graphics.rectangle('fill', (i-1) * cellsize, (j-1) * cellsize, cellsize, cellsize)
+
+				love.graphics.setColor(255, 255, 255)
+				love.graphics.print(playerBoard[i][j], i * cellsize - (cellsize/2)-5,
+													   j * cellsize - (cellsize/2)-5)
+			end								--the -5 is to center the number in the cell
+		end
+
+		-- Set Grid Lines
     	love.graphics.setColor(255, 255, 255)
 		for i = 0, 10 do
 			love.graphics.line(0, i * cellsize, cellsize * 10, i * cellsize)
 			love.graphics.line(i * cellsize, 0, i * cellsize, 10 * cellsize)
 		end
 
-		-- Set Ship Colors/values
-		for i = 1, 10 do
-			for j = 1, 10 do    
-				love.graphics.print(playerBoard[i][j], i * cellsize - (cellsize/2)-5,
-													   j * cellsize - (cellsize/2)-5)
-			end								--the -5 is to center the number in the cell
-		end
 	love.graphics.setCanvas()
 
 	return canvas

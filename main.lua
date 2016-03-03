@@ -158,9 +158,9 @@ function love.mousepressed(x,y,button,istouch)
 	if button == 1 then 
 		ship_err = false --debugging
 		selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-		-- if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
-			-- ship_err = true
-		-- end
+		if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
+			ship_err = true
+		end
 	elseif button == 2 then
 		if Board.find_button_click(x,y,0,0,100,100) and state == P1_PLACING then
 			state = P2_PLACING
