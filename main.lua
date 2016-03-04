@@ -13,6 +13,9 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 CELLSIZE = 40
 
+SHIPTYPE = {"carrier", "battleship", "submarine", "destroyer", "patrol"}
+SHIPDIRECTION  = {"horizontal", "vertical"}
+
 --flags n' stuff
 local ship_err = false
 local mouse_x = nil
@@ -25,6 +28,8 @@ local selected_grid_x = 0
 local selected_grid_y = 0
 local active_board_x = nil
 local active_board_y = nil
+local shipNumber = 1
+local shipDirection = 1
 
 
 --states
@@ -200,6 +205,26 @@ function love.mousepressed(x,y,button,istouch)
 			-- state = P1_PLACING
 		-- end
 	-- end
+end
+
+function love.keypressed(key)
+    if key == '1' then
+    	shipNumber = 1
+    elseif key == '2' then
+    	shipNumber = 2
+    elseif key == '3' then
+    	shipNumber = 3
+    elseif key == '4' then
+    	shipNumber = 4
+    elseif key == '5' then
+    	shipNumber = 5
+    elseif key == 'space' then
+    	if shipDirection == 1 then
+    		shipDirection = 2
+    	else
+    		shipDirection = 1
+    	end
+    end
 end
 
 function love.update(dt)
