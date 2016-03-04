@@ -11,7 +11,7 @@ Board = require('board')
 --constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-CELLSIZE = 50
+CELLSIZE = 40
 
 --flags n' stuff
 local ship_err = false
@@ -26,6 +26,7 @@ local selected_grid_y = 0
 local active_board_x = nil
 local active_board_y = nil
 
+
 --states
 local START = 1
 local P1_PLACING = 2
@@ -34,6 +35,8 @@ local P1_TURN = 4
 local P2_TURN = 5
 local P1_PICKING = 6
 local P2_PICKING = 7
+local SWAP_P1 = 8
+local SWAP_P2 = 9
 
 -----------------
 --state handlers
@@ -65,8 +68,8 @@ end
 --Update
 ----------
 local function handle_P1_PLACING_UP()
-	sub_message = "PLAYER 1 PLACE YOUR SHIPS" -- I wrote this stuff at 5 am, I may not remember
-	active_board_x = player1board.x	  -- how any of it works
+	sub_message = "PLAYER 1 PLACE YOUR SHIPS"
+	active_board_x = player1board.x
 	active_board_y = player1board.y
 	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
 end
@@ -101,10 +104,12 @@ end
 --------
 local function handle_P1_PLACING_DRAW()
 	love.graphics.draw(player1_board_grid, player1board.x,player1board.y)
+	love.graphics.rectangle("fill", 700, 10, 90, 50)
 end
 
 local function handle_P2_PLACING_DRAW()
 	love.graphics.draw(player2_board_grid, player2board.x,player2board.y)
+	love.graphics.rectangle("fill", 700, 10, 90, 50)
 end
 
 local function handle_P1_PICKING_DRAW()
@@ -122,6 +127,7 @@ end
 local function handle_P2_TURN_DRAW()
 	
 end
+
 
 -- Configuration
 function love.conf(t)
@@ -143,33 +149,57 @@ end
 					[P2_TURN]    = handle_P2_TURN_UP}
  
  draw_handlers = {[START] = handle_START,
-					[P1_PLACING] = handle_P1_PLACING_DRAW,
-					[P1_PICKING] = handle_P1_PICKING_DRAW,
-					[P1_TURN]    = handle_P1_TURN_DRAW,
-					[P2_PLACING] = handle_P2_PLACING_DRAW,
-					[P2_PICKING] = handle_P2_PICKING_DRAW,
-					[P2_TURN]    = handle_P2_TURN_DRAW}
-
+				  [P1_PLACING] = handle_P1_PLACING_DRAW,
+				  [P1_PICKING] = handle_P1_PICKING_DRAW,
+				  [P1_TURN]    = handle_P1_TURN_DRAW,
+				  [P2_PLACING] = handle_P2_PLACING_DRAW,
+				  [P2_PICKING] = handle_P2_PICKING_DRAW,
+				  [P2_TURN]    = handle_P2_TURN_DRAW}
+				
 function love.load(arg)
 	state = START
 end
 
 function love.mousepressed(x,y,button,istouch)
-	if button == 1 then 
-		ship_err = false --debugging
-		selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-		-- if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
-			-- ship_err = true
-		-- end
-	elseif button == 2 then
-		if Board.find_button_click(x,y,0,0,100,100) and state == P1_PLACING then
-			state = P2_PLACING
-		elseif Board.find_button_click(x,y,0,0,100,100) and state == P2_PLACING then
-			state = P1_PLACING
+	if state == P1_PLACING then
+		if button == 1 then
+			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+			if Board.find_button_click(x,y,700,10,90,50) then
+				state = P2_PLACING
+			end
 		end
-	end
+	elseif state == P2_PLACING then
+		if button == 1 then
+			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+			if Board.find_button_click(x,y,700,10,90,50) then
+				state = P1_PLACING
+			end
+		end		
+	elseif state == P1_TURN then
+		if button == 1 then
+			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+		end		
+	elseif state == P2_TURN then
+		if button == 1 then
+			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+		end		
 	
-
+	end
+	-- if button == 1 then 
+		-- ship_err = false --debugging
+		-- selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+		-- if selected_grid_x then		
+			 -- if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
+				-- ship_err = true
+			 -- end
+		-- end
+	-- elseif button == 2 then
+		-- if Board.find_button_click(x,y,0,0,100,100) and state == P1_PLACING then
+			-- state = P2_PLACING
+		-- elseif Board.find_button_click(x,y,0,0,100,100) and state == P2_PLACING then
+			-- state = P1_PLACING
+		-- end
+	-- end
 end
 
 function love.update(dt)
