@@ -197,10 +197,10 @@ function love.mousepressed(x,y,button,istouch)
 				once = true
 			end
 		end
-		if selected_grid_x then		
+		if selected_grid_x and placing then		
 			if Board.place_ship(player1board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
 				ship_err = true
-			else
+			else --ship placing was successful
 				placing = false
 				if shipNumber = 1 then
 					car_placed = true
@@ -223,10 +223,10 @@ function love.mousepressed(x,y,button,istouch)
 				once = true
 			end
 		end	
-		if selected_grid_x then		
+		if selected_grid_x and placing then		
 			if Board.place_ship(player2board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
 				ship_err = true
-			else
+			else --ship placing was successful
 				placing = false
 				if shipNumber = 1 then
 					car_placed = true
