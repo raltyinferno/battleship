@@ -36,6 +36,7 @@ local sub_placed = false
 local des_placed = false
 local pat_placed = false
 local placing = false
+local once = true
 
 
 --states
@@ -79,6 +80,14 @@ end
 --Update
 ----------
 local function handle_P1_PLACING_UP()
+	if once then
+		local car_placed = false
+		local bat_placed = false
+		local sub_placed = false
+		local des_placed = false
+		local pat_placed = false
+		once = false
+	end
 	sub_message = "PLAYER 1 PLACE YOUR SHIPS"
 	active_board_x = player1board.x
 	active_board_y = player1board.y
@@ -86,6 +95,14 @@ local function handle_P1_PLACING_UP()
 end
 
 local function handle_P2_PLACING_UP()
+	if once then
+		local car_placed = false
+		local bat_placed = false
+		local sub_placed = false
+		local des_placed = false
+		local pat_placed = false
+		once = false
+	end
 	sub_message = "PLAYER 2 PLACE YOUR SHIPS"
 	active_board_x = player2board.x
 	active_board_y = player2board.y
@@ -175,8 +192,9 @@ function love.mousepressed(x,y,button,istouch)
 	if state == P1_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-			if Board.find_button_click(x,y,700,10,90,50) then
+			if Board.find_button_click(x,y,700,10,90,50) then --debugging
 				state = P2_PLACING
+				once = true
 			end
 		end
 		if selected_grid_x then		
@@ -200,8 +218,9 @@ function love.mousepressed(x,y,button,istouch)
 	elseif state == P2_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-			if Board.find_button_click(x,y,700,10,90,50) then
+			if Board.find_button_click(x,y,700,10,90,50) then --debugging
 				state = P1_PLACING
+				once = true
 			end
 		end	
 		if selected_grid_x then		
