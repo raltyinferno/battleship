@@ -30,6 +30,12 @@ local active_board_x = nil
 local active_board_y = nil
 local shipNumber = 1
 local shipDirection = 1
+local car_placed = false
+local bat_placed = false
+local sub_placed = false
+local des_placed = false
+local pat_placed = false
+local placing = false
 
 
 --states
@@ -173,13 +179,27 @@ function love.mousepressed(x,y,button,istouch)
 				state = P2_PLACING
 			end
 		end
+		if selected_grid_x then		
+			if Board.place_ship(player1board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
+				ship_err = true
+			else
+				placing = false
+			end
+		end
 	elseif state == P2_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 			if Board.find_button_click(x,y,700,10,90,50) then
 				state = P1_PLACING
 			end
-		end		
+		end	
+		if selected_grid_x then		
+			if Board.place_ship(player2board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
+				ship_err = true
+			else
+				placing = false
+			end
+		end
 	elseif state == P1_TURN then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
@@ -190,41 +210,34 @@ function love.mousepressed(x,y,button,istouch)
 		end		
 	
 	end
-	-- if button == 1 then 
-		-- ship_err = false --debugging
-		-- selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-		-- if selected_grid_x then		
-			 -- if Board.place_ship(player1board,selected_grid_x,selected_grid_y,"patrol","horizontal")then--debuging
-				-- ship_err = true
-			 -- end
-		-- end
-	-- elseif button == 2 then
-		-- if Board.find_button_click(x,y,0,0,100,100) and state == P1_PLACING then
-			-- state = P2_PLACING
-		-- elseif Board.find_button_click(x,y,0,0,100,100) and state == P2_PLACING then
-			-- state = P1_PLACING
-		-- end
-	-- end
 end
 
 function love.keypressed(key)
-    if key == '1' then
-    	shipNumber = 1
-    elseif key == '2' then
-    	shipNumber = 2
-    elseif key == '3' then
-    	shipNumber = 3
-    elseif key == '4' then
-    	shipNumber = 4
-    elseif key == '5' then
-    	shipNumber = 5
-    elseif key == 'space' then
-    	if shipDirection == 1 then
-    		shipDirection = 2
-    	else
-    		shipDirection = 1
-    	end
-    end
+	if state = P1_PLACING
+		if key == '1'  and not car_placed and not placing then
+			shipNumber = 1
+			placing = true
+		elseif key == '2' and not bat_placed and not placing then
+			shipNumber = 2
+			placing = true
+		elseif key == '3' and not sub_placed and not placing then
+			shipNumber = 3
+			placing = true
+		elseif key == '4' and not des_placed and not placing then
+			shipNumber = 4
+			placing = true
+		elseif key == '5' and not pat_placed and not placing then
+			shipNumber = 5
+			placing = true
+		elseif key == 'space' then
+			if shipDirection == 1 then
+				shipDirection = 2
+			else
+				shipDirection = 1
+			end
+		end
+	elseif state = P2_PLACING
+		
 end
 
 function love.update(dt)
@@ -247,8 +260,12 @@ function love.draw(dt)
 	if ship_err then
 		love.graphics.print("error placing ship, try again",600,570)
 	end
-
+love.graphics.print("Ship (Num Keys #1-5)", 3,5)
+	love.graphics.print("#" .. shipNumber .. " - " .. SHIPTYPE[shipNumber], 3,20)
+	love.graphics.print("Direction: (Space Key)", 3, 35)
+	love.graphics.print(SHIPDIRECTION[shipDirection], 3, 50)
 end
+
 
 
 
