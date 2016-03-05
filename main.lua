@@ -202,7 +202,7 @@ function love.mousepressed(x,y,button,istouch)
 				ship_err = true
 			else --ship placing was successful
 				placing = false
-				if shipNumber = 1 then
+				if shipNumber == 1 then
 					car_placed = true
 				elseif shipNumber == 2 then
 					bat_placed = true
@@ -228,7 +228,7 @@ function love.mousepressed(x,y,button,istouch)
 				ship_err = true
 			else --ship placing was successful
 				placing = false
-				if shipNumber = 1 then
+				if shipNumber == 1 then
 					car_placed = true
 				elseif shipNumber == 2 then
 					bat_placed = true
@@ -254,7 +254,7 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function love.keypressed(key)
-	if state = P1_PLACING
+	if state == P1_PLACING then
 		if key == '1'  and not car_placed and not placing then
 			shipNumber = 1
 			placing = true
@@ -277,7 +277,30 @@ function love.keypressed(key)
 				shipDirection = 1
 			end
 		end
-	elseif state = P2_PLACING
+	elseif state == P2_PLACING then
+		if key == '1'  and not car_placed and not placing then
+			shipNumber = 1
+			placing = true
+		elseif key == '2' and not bat_placed and not placing then
+			shipNumber = 2
+			placing = true
+		elseif key == '3' and not sub_placed and not placing then
+			shipNumber = 3
+			placing = true
+		elseif key == '4' and not des_placed and not placing then
+			shipNumber = 4
+			placing = true
+		elseif key == '5' and not pat_placed and not placing then
+			shipNumber = 5
+			placing = true
+		elseif key == 'space' then
+			if shipDirection == 1 then
+				shipDirection = 2
+			else
+				shipDirection = 1
+			end
+		end
+	end
 		
 end
 
