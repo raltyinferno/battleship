@@ -12,6 +12,7 @@ Board = require('board')
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 CELLSIZE = 40
+MINICELLSIZE = 15
 
 SHIPTYPE = {"carrier", "battleship", "submarine", "destroyer", "patrol"}
 SHIPDIRECTION  = {"horizontal", "vertical"}
@@ -52,14 +53,20 @@ local function handle_START()
 	player1board = Board.new_board()
 	player2board = Board.new_board()
 	
-	player1board.x = SCREEN_WIDTH/2-(10*CELLSIZE/2)
+	player1board.x = SCREEN_WIDTH/2 - (10*CELLSIZE/2)
 	player1board.y = 10
 	
-	player2board.x = SCREEN_WIDTH/2-(10*CELLSIZE/2)
+	player2board.x = SCREEN_WIDTH/2 - (10*CELLSIZE/2)
 	player2board.y = 10
 	
 	player1target = Board.new_board()
 	player2target = Board.new_board()
+
+	player1target.x = SCREEN_WIDTH - (10*MINICELLSIZE) - 10
+	player1target.y = SCREEN_HEIGHT/3
+
+	player2target.x = SCREEN_WIDTH - (10*MINICELLSIZE) - 10
+	player2target.y = SCREEN_HEIGHT/3
 
 	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
 	player1_target_grid  = Board.drawBoard(CELLSIZE, player2target)
@@ -95,13 +102,15 @@ local function handle_P2_PICKING_UP()
 end
 
 local function handle_P1_TURN_UP()
-	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
-	player1_target_grid  = Board.drawBoard(CELLSIZE, player2target)
+	sub_message = "PLAYER 1 FIRE AT YOUR ENEMY"
+	player1_board_grid  = Board.drawBoard(MINICELLSIZE, player1board)
+	player1_target_grid  = Board.drawBoard(CELLSIZE, player1target)
 end
 
 local function handle_P2_TURN_UP()
-	player2_board_grid  = Board.drawBoard(CELLSIZE, player2board)
-	player2_target_grid  = Board.drawBoard(CELLSIZE, player1target)
+	sub_message = "PLAYER 2 FIRE AT YOUR ENEMY"
+	player2_board_grid  = Board.drawBoard(MINICELLSIZE, player2board)
+	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
 end
 
 --------
@@ -158,11 +167,13 @@ local function handle_P2_PICKING_DRAW()
 end
 
 local function handle_P1_TURN_DRAW()
-	
+	love.graphics.draw(player1_target_grid, player1board.x, player1board.y)
+	love.graphics.draw(player1_board_grid, player1target.x, player1target.y)
 end
 
 local function handle_P2_TURN_DRAW()
-	
+	love.graphics.draw(player2_target_grid, player2board.x, player2board.y)
+	love.graphics.draw(player2_board_grid, player2target.x, player2target.y)
 end
 
 
@@ -209,13 +220,17 @@ function love.mousepressed(x,y,button,istouch)
 			if Board.place_ship(player1board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
 				ship_err = true
 			else --ship placing was successful
+				ship_err = false
 				p1_ships_placed[shipNumber] = true
 			end
 		end
 		if p1_ships_placed[1] and p1_ships_placed[2] and p1_ships_placed[3]
 			                  and p1_ships_placed[4] and p1_ships_placed[5] then
+			shipNumber = 1
+			shipDirection = 1
 			state = P2_PLACING
 		end
+
 	elseif state == P2_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
@@ -227,6 +242,7 @@ function love.mousepressed(x,y,button,istouch)
 			if Board.place_ship(player2board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
 				ship_err = true
 			else --ship placing was successful
+				ship_err = false
 				p2_ships_placed[shipNumber] = true
 			end
 		end
@@ -234,13 +250,28 @@ function love.mousepressed(x,y,button,istouch)
 			                  and p2_ships_placed[4] and p2_ships_placed[5] then
 			state = P1_TURN
 		end
+
 	elseif state == P1_TURN then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-		end		
+			
+			if Board.fire_at_ship(player1target,player2board,selected_grid_x,selected_grid_y) then
+				ship_err = false
+			else
+				ship_err = true
+			end
+		end	
+		
+
 	elseif state == P2_TURN then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+
+			if Board.fire_at_ship(player2target,player1board,selected_grid_x,selected_grid_y) then
+				ship_err = false
+			else
+				ship_err = true
+			end
 		end		
 	end
 end

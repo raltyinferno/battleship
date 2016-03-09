@@ -11,3 +11,6 @@ We tried some pair programming to get some tests working for test driven develop
 
 2/24/16
 Lots of pair programming with Kai. Got the unit testing working, got love to compile, and got the basic board display working. It was nice to finally get lots of work done and finalize our basic design.
+
+3/7/16
+Got player1 selecting and placing one ship each and then the same with player2 after player1 is done. Now we have to set up selecting the target board.
