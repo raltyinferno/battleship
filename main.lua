@@ -76,14 +76,14 @@ local function handle_P1_PLACING_UP()
 	sub_message = "PLAYER 1 PLACE YOUR SHIPS"
 	active_board_x = player1board.x
 	active_board_y = player1board.y
-	player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
+	--player1_board_grid  = Board.drawBoard(CELLSIZE, player1board)
 end
 
 local function handle_P2_PLACING_UP()
 	sub_message = "PLAYER 2 PLACE YOUR SHIPS"
 	active_board_x = player2board.x
 	active_board_y = player2board.y
-	player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
+	--player2_board_grid  = Board.drawBoard(CELLSIZE, player1target)
 end
 
 local function handle_P1_PICKING_UP()
