@@ -193,8 +193,8 @@ function love.mousepressed(x,y,button,istouch)
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 			if Board.find_button_click(x,y,700,10,90,50) then --debugging
-				state = P2_PLACING
 				once = true
+				state = P2_PLACING				
 			end
 		end
 		if selected_grid_x and placing then		
@@ -219,8 +219,8 @@ function love.mousepressed(x,y,button,istouch)
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 			if Board.find_button_click(x,y,700,10,90,50) then --debugging
-				state = P1_PLACING
 				once = true
+				state = P1_PLACING
 			end
 		end	
 		if selected_grid_x and placing then		
@@ -328,6 +328,7 @@ love.graphics.print("Ship (Num Keys #1-5)", 3,5)
 	love.graphics.print("#" .. shipNumber .. " - " .. SHIPTYPE[shipNumber], 3,20)
 	love.graphics.print("Direction: (Space Key)", 3, 35)
 	love.graphics.print(SHIPDIRECTION[shipDirection], 3, 50)
+	
 end
 
 
