@@ -5,6 +5,11 @@
 
 Requirements Document
 
+Scope/Description:
+Project is the game battleship. Playable by 2 human players at the same computer, allows one player to place ships, then the other, 
+swaping between boards on the same screen. Then the 2 players take turns firing on the other until one player hits all of the other's ships
+at which point a win screen will be displayed and the game can be restarted
+
 Interface:
 - Graphical interface
 - Allows clicking to place ships

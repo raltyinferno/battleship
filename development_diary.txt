@@ -28,3 +28,7 @@ literal in many places to passing them a single variable that can be changed in 
 
 2/27/16:
 Added a function that should work for detecting mouse clicks for any button given that button's position and dimensions
+
+3/9/16:
+-Disallowed firing on previously hit squares
+-changed message for invalid hit
