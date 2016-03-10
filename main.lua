@@ -255,25 +255,24 @@ function love.mousepressed(x,y,button,istouch)
 
 	elseif state == P1_TURN then
 		if button == 1 then
-			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+			selected_grid_x, selected_grid_y = Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 			
-			if Board.fire_at_ship(player1target,player2board,selected_grid_x,selected_grid_y) then
-				ship_err = false
-			else
-				ship_err = true
+			ship_err, hit = Board.fire_at_ship(player1target,player2board,selected_grid_x,selected_grid_y)
+			if not ship_err and not hit then
+				state = P2_TURN
 			end
 		end	
 		
 
 	elseif state == P2_TURN then
 		if button == 1 then
-			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+			selected_grid_x, selected_grid_y = Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 
-			if Board.fire_at_ship(player2target,player1board,selected_grid_x,selected_grid_y) then
-				ship_err = false
-			else
-				ship_err = true
+			ship_err, hit = Board.fire_at_ship(player2target,player1board,selected_grid_x,selected_grid_y)
+			if not ship_err and not hit then
+				state = P1_TURN
 			end
+
 		end		
 	end
 end
