@@ -10,7 +10,9 @@ local boardColor = 	{ {0,150,200}, --ocean
 					  {201,151,0}, --ship 2
 					  {201,0,50}, --ship 3
 					  {50,0,201}, --ship 4
-					  {151,0,201} --ship 5
+					  {151,0,201}, --ship 5
+					  {255,0,0}, --hit
+					  {128,128,128} --miss
 					}
 
 function Board.new_board()
@@ -118,6 +120,21 @@ function Board.place_ship(board, x, y, ship_type, orientation)
 		collision = true
 	end
 	return collision
+end
+
+function Board.fire_at_ship(targetBoard, enemyBoard, selected_x, selected_y)
+	if selected_x < 1 or selected_y > 10 or selected_y < 1 or selected_y > 10 then
+		return false
+	end
+	if enemyBoard[selected_x][selected_y] == 0 then
+		targetBoard[selected_x][selected_y] = 7
+
+		return true
+	elseif enemyBoard[selected_x][selected_y] > 0 and enemyBoard[selected_x][selected_y] < 6 then
+		targetBoard[selected_x][selected_y] = 6
+
+		return true
+	end
 end
 
 function Board.find_grid_click(x,y,mouse_x,mouse_y,cellsize) --param 1 and 2 are position of board
