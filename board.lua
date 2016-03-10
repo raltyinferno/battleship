@@ -123,19 +123,17 @@ function Board.place_ship(board, x, y, ship_type, orientation)
 end
 
 function Board.fire_at_ship(targetBoard, enemyBoard, selected_x, selected_y)
-	if selected_x < 1 or selected_y > 10 or selected_y < 1 or selected_y > 10 then
-		return false
-	end
-	if enemyBoard[selected_x][selected_y] == 0 then
-		targetBoard[selected_x][selected_y] = 7
-
+	if selected_x < 1 or selected_y > 10 or selected_y < 1 or selected_y > 10
+	   or targetBoard[selected_x][selected_y] > 5 then
 		return true
+
+	elseif enemyBoard[selected_x][selected_y] == 0 then
+		targetBoard[selected_x][selected_y] = 7
+		return false, false
+
 	elseif enemyBoard[selected_x][selected_y] > 0 and enemyBoard[selected_x][selected_y] < 6 then
 		targetBoard[selected_x][selected_y] = 6
-
-		return true
-	else
-		return false
+		return false, true
 	end
 end
 
