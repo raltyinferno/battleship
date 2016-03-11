@@ -350,8 +350,8 @@ function love.draw(dt)
 	
 	
 --Debuging stuff
-	love.graphics.print("Mouse x: " .. mouse_x .. " Mouse y " .. mouse_y, 50, 550)
-	love.graphics.print("Grid x: " .. selected_grid_x .. " Grid y " .. selected_grid_y, 450, 550)
+	-- love.graphics.print("Mouse x: " .. mouse_x .. " Mouse y " .. mouse_y, 50, 550)
+	-- love.graphics.print("Grid x: " .. selected_grid_x .. " Grid y " .. selected_grid_y, 450, 550)
 	
 	if ship_err and (state == P1_PLACING or state == P2_PLACING) then
 		love.graphics.print("error placing ship, try again",600,570)

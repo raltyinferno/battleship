@@ -32,3 +32,8 @@ Added a function that should work for detecting mouse clicks for any button give
 3/9/16:
 -Disallowed firing on previously hit squares
 -changed message for invalid hit
+
+3/10/16:
+-Added a swap screen between player turns to keep them from seeing each other's boards
+-Added a win condition once all ships are hit
+-game is complete!
