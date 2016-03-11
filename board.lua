@@ -41,8 +41,9 @@ function Board.drawBoard(cellsize, playerBoard)
 				love.graphics.rectangle('fill', (i-1) * cellsize, (j-1) * cellsize, cellsize, cellsize)
 
 				love.graphics.setColor(255, 255, 255)
-				love.graphics.print(playerBoard[i][j], i * cellsize - (cellsize/2)-5,
-													   j * cellsize - (cellsize/2)-5)
+				--prints numbers in the squares (mostly for debugging)
+				-- love.graphics.print(playerBoard[i][j], i * cellsize - (cellsize/2)-5,
+													   -- j * cellsize - (cellsize/2)-5)
 			end								--the -5 is to center the number in the cell
 		end
 
@@ -123,7 +124,7 @@ function Board.place_ship(board, x, y, ship_type, orientation)
 end
 
 function Board.fire_at_ship(targetBoard, enemyBoard, selected_x, selected_y)
-	if selected_x < 1 or selected_y > 10 or selected_y < 1 or selected_y > 10
+	if selected_x < 1 or selected_x > 10 or selected_y < 1 or selected_y > 10
 	   or targetBoard[selected_x][selected_y] > 5 then
 		return true
 

@@ -31,6 +31,9 @@ local active_board_x = nil
 local active_board_y = nil
 local shipNumber = 1
 local shipDirection = 1
+local next_state = nil
+local p1_hits = 0
+local p2_hits = 0
 
 
 --states
@@ -43,6 +46,7 @@ local P1_PICKING = 6
 local P2_PICKING = 7
 local SWAP_P1 = 8
 local SWAP_P2 = 9
+local WINNER = 10
 
 -----------------
 --state handlers
@@ -108,10 +112,14 @@ local function handle_P2_TURN_UP()
 end
 
 local function handle_SWAP_P1_UP()
---supposed to be empty
+	sub_message = "PLAYER 2 CLICK THE SCREEN WHEN READY"
 end
 
 local function handle_SWAP_P2_UP()
+	sub_message = "PLAYER 1 CLICK THE SCREEN WHEN READY"
+end
+
+local function handle_WINNER_UP()
 --supposed to be empty
 end
 
@@ -120,7 +128,6 @@ end
 --------
 local function handle_P1_PLACING_DRAW()
 	love.graphics.draw(player1_board_grid, player1board.x,player1board.y)
-	love.graphics.rectangle("fill", 700, 10, 90, 50)
 
 	love.graphics.print("Direction: (Space Key)", 3, 5)
 	love.graphics.print({{0,255,0},SHIPDIRECTION[shipDirection]}, 3, 20)
@@ -141,7 +148,6 @@ end
 
 local function handle_P2_PLACING_DRAW()
 	love.graphics.draw(player2_board_grid, player2board.x,player2board.y)
-	love.graphics.rectangle("fill", 700, 10, 90, 50)
 
 	love.graphics.print("Direction: (Space Key)", 3, 5)
 	love.graphics.print({{0,255,0},SHIPDIRECTION[shipDirection]}, 3, 20)
@@ -170,12 +176,14 @@ local function handle_P2_TURN_DRAW()
 	love.graphics.draw(player2_board_grid, player2target.x, player2target.y)
 end
 
+--these exist just to not crash when the state table tries to reference them
 local function handle_SWAP_P1_DRAW()
-
 end
 
 local function handle_SWAP_P2_DRAW()
+end
 
+local function handle_WINNER_DRAW()
 end
 
 -- Configuration
@@ -189,21 +197,23 @@ function love.conf(t)
 	t.console = true
 end
 
- update_handlers = {[START] = handle_START,
+ update_handlers = {[START]      = handle_START,
 					[P1_PLACING] = handle_P1_PLACING_UP,
 					[P1_TURN]    = handle_P1_TURN_UP,
 					[P2_PLACING] = handle_P2_PLACING_UP,
 					[P2_TURN]    = handle_P2_TURN_UP,
 					[SWAP_P1]    = handle_SWAP_P1_UP,
-				    [SWAP_P2]    = handle_SWAP_P2_UP}
+				    [SWAP_P2]    = handle_SWAP_P2_UP,
+					[WINNER]     = handle_WINNER_UP}
  
- draw_handlers = {[START] = handle_START,
+ draw_handlers = {[START]      = handle_START,
 				  [P1_PLACING] = handle_P1_PLACING_DRAW,
 				  [P1_TURN]    = handle_P1_TURN_DRAW,
 				  [P2_PLACING] = handle_P2_PLACING_DRAW,
 				  [P2_TURN]    = handle_P2_TURN_DRAW,
 				  [SWAP_P1]    = handle_SWAP_P1_DRAW,
-				  [SWAP_P2]    = handle_SWAP_P2_DRAW}
+				  [SWAP_P2]    = handle_SWAP_P2_DRAW,
+				  [WINNER]     = handle_WINNER_DRAW}
 				
 function love.load(arg)
 	state = START
@@ -213,11 +223,8 @@ function love.mousepressed(x,y,button,istouch)
 	if state == P1_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-
-			-- if Board.find_button_click(x,y,700,10,90,50) then --debugging
-			-- 	state = P2_PLACING
-			-- end
 		end
+		
 		if selected_grid_x and p1_ships_placed[shipNumber] == false then		
 			if Board.place_ship(player1board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
 				ship_err = true
@@ -230,18 +237,17 @@ function love.mousepressed(x,y,button,istouch)
 			                  and p1_ships_placed[4] and p1_ships_placed[5] then
 			shipNumber = 1
 			shipDirection = 1
-			state = P2_PLACING
+			next_state = P2_PLACING
+			state = SWAP_P1
 		end
 
 	elseif state == P2_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
-			-- if Board.find_button_click(x,y,700,10,90,50) then --debugging
-			-- 	state = P1_PLACING
-			-- end
 		end	
+		
 		if selected_grid_x and p2_ships_placed[shipNumber] == false then		
-			if Board.place_ship(player2board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then--debuging
+			if Board.place_ship(player2board,selected_grid_x,selected_grid_y,SHIPTYPE[shipNumber],SHIPDIRECTION[shipDirection])then
 				ship_err = true
 			else --ship placing was successful
 				ship_err = false
@@ -250,7 +256,8 @@ function love.mousepressed(x,y,button,istouch)
 		end
 		if p2_ships_placed[1] and p2_ships_placed[2] and p2_ships_placed[3]
 			                  and p2_ships_placed[4] and p2_ships_placed[5] then
-			state = P1_TURN
+			next_state = P1_TURN
+			state = SWAP_P2
 		end
 
 	elseif state == P1_TURN then
@@ -258,9 +265,17 @@ function love.mousepressed(x,y,button,istouch)
 			selected_grid_x, selected_grid_y = Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 			
 			ship_err, hit = Board.fire_at_ship(player1target,player2board,selected_grid_x,selected_grid_y)
+			if hit then
+				p1_hits = p1_hits+1
+			end
 			if not ship_err then
 				Board.fire_at_ship(player2board,player2board,selected_grid_x,selected_grid_y)
-				state = P2_TURN
+				next_state = P2_TURN
+				state = SWAP_P1
+			end
+			if p1_hits == 17 then
+				state = WINNER
+				sub_message = "PLAYER 1 WINS!"
 			end
 		end	
 		
@@ -270,18 +285,29 @@ function love.mousepressed(x,y,button,istouch)
 			selected_grid_x, selected_grid_y = Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 
 			ship_err, hit = Board.fire_at_ship(player2target,player1board,selected_grid_x,selected_grid_y)
+			if hit then
+				p2_hits = p2_hits+1
+			end
+			
 			if not ship_err then
 				Board.fire_at_ship(player1board,player2board,selected_grid_x,selected_grid_y)
-				state = P1_TURN
+				next_state = P1_TURN
+				state = SWAP_P2
 			end
-
+			if p2_hits == 17 then
+				state = WINNER
+				sub_message = "PLAYER 2 WINS!"
+			end
 		end	
-	elseif state == SWAP_P1 then
-		--button
-	
+	elseif state == SWAP_P1 then		
+		if button == 1 then
+			state = next_state
+		end
+		
 	elseif state == SWAP_P2 then
-		--button
-	
+		if button == 1 then
+			state = next_state 
+		end
 	end
 end
 
