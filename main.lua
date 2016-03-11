@@ -95,14 +95,6 @@ local function handle_P2_PLACING_UP()
 	player2_board_grid  = Board.drawBoard(CELLSIZE, player2board)
 end
 
-local function handle_P1_PICKING_UP()
-
-end
-
-local function handle_P2_PICKING_UP()
-
-end
-
 local function handle_P1_TURN_UP()
 	sub_message = "PLAYER 1 FIRE AT YOUR ENEMY"
 	player1_board_grid  = Board.drawBoard(MINICELLSIZE, player1board)
@@ -113,6 +105,14 @@ local function handle_P2_TURN_UP()
 	sub_message = "PLAYER 2 FIRE AT YOUR ENEMY"
 	player2_board_grid  = Board.drawBoard(MINICELLSIZE, player2board)
 	player2_target_grid  = Board.drawBoard(CELLSIZE, player2target)
+end
+
+local function handle_SWAP_P1_UP()
+--supposed to be empty
+end
+
+local function handle_SWAP_P2_UP()
+--supposed to be empty
 end
 
 --------
@@ -160,14 +160,6 @@ local function handle_P2_PLACING_DRAW()
 	love.graphics.print(printShip, 3,50)
 end
 
-local function handle_P1_PICKING_DRAW()
-
-end
-
-local function handle_P2_PICKING_DRAW()
-
-end
-
 local function handle_P1_TURN_DRAW()
 	love.graphics.draw(player1_target_grid, player1board.x, player1board.y)
 	love.graphics.draw(player1_board_grid, player1target.x, player1target.y)
@@ -178,6 +170,13 @@ local function handle_P2_TURN_DRAW()
 	love.graphics.draw(player2_board_grid, player2target.x, player2target.y)
 end
 
+local function handle_SWAP_P1_DRAW()
+
+end
+
+local function handle_SWAP_P2_DRAW()
+
+end
 
 -- Configuration
 function love.conf(t)
@@ -192,19 +191,19 @@ end
 
  update_handlers = {[START] = handle_START,
 					[P1_PLACING] = handle_P1_PLACING_UP,
-					[P1_PICKING] = handle_P1_PICKING_UP,
 					[P1_TURN]    = handle_P1_TURN_UP,
 					[P2_PLACING] = handle_P2_PLACING_UP,
-					[P2_PICKING] = handle_P2_PICKING_UP,
-					[P2_TURN]    = handle_P2_TURN_UP}
+					[P2_TURN]    = handle_P2_TURN_UP,
+					[SWAP_P1]    = handle_SWAP_P1_UP,
+				    [SWAP_P2]    = handle_SWAP_P2_UP}
  
  draw_handlers = {[START] = handle_START,
 				  [P1_PLACING] = handle_P1_PLACING_DRAW,
-				  [P1_PICKING] = handle_P1_PICKING_DRAW,
 				  [P1_TURN]    = handle_P1_TURN_DRAW,
 				  [P2_PLACING] = handle_P2_PLACING_DRAW,
-				  [P2_PICKING] = handle_P2_PICKING_DRAW,
-				  [P2_TURN]    = handle_P2_TURN_DRAW}
+				  [P2_TURN]    = handle_P2_TURN_DRAW,
+				  [SWAP_P1]    = handle_SWAP_P1_DRAW,
+				  [SWAP_P2]    = handle_SWAP_P2_DRAW}
 				
 function love.load(arg)
 	state = START
@@ -214,6 +213,7 @@ function love.mousepressed(x,y,button,istouch)
 	if state == P1_PLACING then
 		if button == 1 then
 			selected_grid_x, selected_grid_y =Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
+
 			-- if Board.find_button_click(x,y,700,10,90,50) then --debugging
 			-- 	state = P2_PLACING
 			-- end
@@ -258,7 +258,8 @@ function love.mousepressed(x,y,button,istouch)
 			selected_grid_x, selected_grid_y = Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 			
 			ship_err, hit = Board.fire_at_ship(player1target,player2board,selected_grid_x,selected_grid_y)
-			if not ship_err and not hit then
+			if not ship_err then
+				Board.fire_at_ship(player2board,player2board,selected_grid_x,selected_grid_y)
 				state = P2_TURN
 			end
 		end	
@@ -269,11 +270,18 @@ function love.mousepressed(x,y,button,istouch)
 			selected_grid_x, selected_grid_y = Board.find_grid_click(active_board_x,active_board_y,x,y,CELLSIZE)
 
 			ship_err, hit = Board.fire_at_ship(player2target,player1board,selected_grid_x,selected_grid_y)
-			if not ship_err and not hit then
+			if not ship_err then
+				Board.fire_at_ship(player1board,player2board,selected_grid_x,selected_grid_y)
 				state = P1_TURN
 			end
 
-		end		
+		end	
+	elseif state == SWAP_P1 then
+		--button
+	
+	elseif state == SWAP_P2 then
+		--button
+	
 	end
 end
 
@@ -318,9 +326,14 @@ function love.draw(dt)
 --Debuging stuff
 	love.graphics.print("Mouse x: " .. mouse_x .. " Mouse y " .. mouse_y, 50, 550)
 	love.graphics.print("Grid x: " .. selected_grid_x .. " Grid y " .. selected_grid_y, 450, 550)
+	
 	if ship_err and (state == P1_PLACING or state == P2_PLACING) then
 		love.graphics.print("error placing ship, try again",600,570)
+	elseif ship_err then
+		love.graphics.print("Invalid firing location, try again",600,570)
 	end
+
+
 end
 
 
